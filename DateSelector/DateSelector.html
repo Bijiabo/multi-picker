@@ -70,6 +70,8 @@
     <div class="block">
         优化版的自定义功能不仅是【单位】自定义<br/><br/>
         【时间范围】也可以自定义,并且尽可能的进行数据校正<br/><br/>
+        <h1 id="fps">FPS</h1>
+        <h1 id="minium-fps"></h1>
         下面的input会展现【2011年13月-27日 102时12分 ~ 2020年10月21日 20时20分】的效果<br/><br/>
     </div>
     <input id="date-selector-inputs" type="text" placeholder="点我~~看自定义效果" readonly/>
@@ -172,6 +174,50 @@
             console.log(arr);
         }//回调
     });
+
+    // display fps
+    var minimumFPS = 100;
+
+    var fps = {
+        startTime: 0,
+        frameNumber: 0,
+        getFPS: function() {
+            this.frameNumber++;
+            var d = new Date().getTime(),
+                currentTime = (d - this.startTime) / 1000,
+                result = Math.floor((this.frameNumber / currentTime));
+            if (currentTime > 1) {
+                this.startTime = new Date().getTime();
+                this.frameNumber = 0;
+            }
+            return result;
+        }
+    };
+
+    var f = document.querySelector("#fps");
+    var minimumFPSElement = document.querySelector("#minium-fps");
+
+    function gameLoop() {
+        window.gameLoopID = setTimeout(gameLoop, 1000 / 60);
+        var currentFPS = fps.getFPS();
+        if (currentFPS < minimumFPS && currentFPS > 20) {
+            minimumFPS = currentFPS;
+        }
+        minimumFPSElement.innerHTML = minimumFPS;
+        f.innerHTML = currentFPS;
+    }
+    //    window.onload = gameLoop;
+    var restartFPS = function () {
+        stopFPS();
+        minimumFPS = 100;
+        gameLoop();
+    };
+    var stopFPS = function () {
+        if (window.gameLoopID) {
+            clearTimeout(window.gameLoopID);
+            window.gameLoopID = undefined;
+        }
+    };
 </script>
 
 </body>

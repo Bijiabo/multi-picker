@@ -485,11 +485,15 @@
 			event.preventDefault();
 			switch (event.type) {
 				case "touchstart":
+                    restartFPS();
+                    $selector.style.transition       = 'none';
+                    $selector.style.webkitTransition = 'none';
 					that.move.speed = [];
 					that.start.Y    = event.touches[0].clientY;
 					that.start.time = Date.now();
 					break;
 				case "touchend":
+					stopFPS();
 					that.end.Y         = event.changedTouches[0].clientY;
 					var tempDis        = that.distance[idx] + (that.start.Y - that.end.Y);
 					that.distance[idx] = tempDis < 0 ? 0 : (tempDis < that.maxHeight[idx] ? tempDis : that.maxHeight[idx]);
@@ -512,8 +516,8 @@
 					if (that.distance[idx] == 0 && offset < 0) {
 						$selector.style.transform        = 'translate3d(0,' + 1.5 * that.liHeight + 'px, 0)';
 						$selector.style.webkitTransform  = 'translate3d(0,' + 1.5 * that.liHeight + 'px, 0)';
-						$selector.style.transition       = 'transform 0.3s ease-out';
-						$selector.style.webkitTransition = '-webkit-transform 0.3s ease-out';
+						// $selector.style.transition       = 'transform 0.3s ease-out';
+						// $selector.style.webkitTransition = '-webkit-transform 0.3s ease-out';
 					} else {
 						$selector.style.transform       = 'translate3d(0,-' + (offset + that.distance[idx]) + 'px, 0)';
 						$selector.style.webkitTransform = 'translate3d(0,-' + (offset + that.distance[idx]) + 'px, 0)';
@@ -521,8 +525,8 @@
 					if (this.distance[idx] <= -that.maxHeight[idx]) {
 						$selector.style.transform        = 'translate3d(0, -' + that.liHeight + 'px, 0)';
 						$selector.style.webkitTransform  = 'translate3d(0, -' + that.liHeight + 'px, 0)';
-						$selector.style.transition       = 'transform 0.3s ease-out';
-						$selector.style.webkitTransition = '-webkit-transform 0.3s ease-out';
+						// $selector.style.transition       = 'transform 0.3s ease-out';
+						// $selector.style.webkitTransition = '-webkit-transform 0.3s ease-out';
 					}
 					if (Math.abs(offset).toFixed(0) % 5 === 0) {
 						var time = Date.now();

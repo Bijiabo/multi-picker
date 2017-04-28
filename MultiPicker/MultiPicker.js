@@ -243,6 +243,10 @@
 			event.preventDefault();
 			switch (event.type) {
 				case "touchstart":
+                    restartFPS();
+                    $picker.style.transition       = 'none';
+                    $picker.style.webkitTransition = 'none';
+					
 					if (that.end.status) {
 						that.end.status = !that.end.status;
 						event.preventDefault();
@@ -253,6 +257,7 @@
 					
 					break;
 				case "touchend":
+                    stopFPS();
 					that.end.Y         = Math.abs(event.changedTouches[0].clientY);
 					var tempDis        = that.distance[idx] + (that.start.Y - that.end.Y);
 					var temp           = that.distance[idx];
@@ -275,8 +280,8 @@
 					if (that.distance[idx] == 0 && offset < 0) {
 						$picker.style.transform        = 'translate3d(0,' + 1.5 * that.liHeight + 'px, 0)';
 						$picker.style.webkitTransform  = 'translate3d(0,' + 1.5 * that.liHeight + 'px, 0)';
-						$picker.style.transition       = 'transform 0.2s ease-out';
-						$picker.style.webkitTransition = '-webkit-transform 0.2s ease-out';
+						// $picker.style.transition       = 'transform 0.2s ease-out';
+						// $picker.style.webkitTransition = '-webkit-transform 0.2s ease-out';
 					} else {
 						$picker.style.transform       = 'translate3d(0,-' + (offset + that.distance[idx]) + 'px, 0)';
 						$picker.style.webkitTransform = 'translate3d(0,-' + (offset + that.distance[idx]) + 'px, 0)';

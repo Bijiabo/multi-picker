@@ -67,7 +67,7 @@
 
 <body>
 <h3>MultiPicker.</h3>
-<article>
+<article style="padding-bottom: 100px;">
     <p>0.请在移动端下打开~~</p>
     <p>1.点击下面的输入演示样式</p>
     <input id="multiPickerInput" type="text" placeholder="点我~~看固定效果" readonly/>
@@ -76,6 +76,8 @@
         可以执行不同的深度等级<br/><br/>
         如果想要效果,点击input<br/><br/>
     </div>
+    <h1 id="fps">FPS</h1>
+    <h1 id="minium-fps"></h1>
     <p>2.最终选择的json:</p>
     <div class="block" id="showBlock" style="line-height: 1.5;">
         这里会显示最终的结果
@@ -115,6 +117,50 @@
             document.getElementById('showBlock2').innerHTML = JSON.stringify(arr);
         }//回调
     });
+
+    // display fps
+    var minimumFPS = 100;
+
+    var fps = {
+        startTime: 0,
+        frameNumber: 0,
+        getFPS: function() {
+            this.frameNumber++;
+            var d = new Date().getTime(),
+                currentTime = (d - this.startTime) / 1000,
+                result = Math.floor((this.frameNumber / currentTime));
+            if (currentTime > 1) {
+                this.startTime = new Date().getTime();
+                this.frameNumber = 0;
+            }
+            return result;
+        }
+    };
+
+    var f = document.querySelector("#fps");
+    var minimumFPSElement = document.querySelector("#minium-fps");
+
+    function gameLoop() {
+        window.gameLoopID = setTimeout(gameLoop, 1000 / 60);
+        var currentFPS = fps.getFPS();
+        if (currentFPS < minimumFPS && currentFPS > 20) {
+            minimumFPS = currentFPS;
+        }
+        minimumFPSElement.innerHTML = minimumFPS;
+        f.innerHTML = currentFPS;
+    }
+//    window.onload = gameLoop;
+    var restartFPS = function () {
+        stopFPS();
+        minimumFPS = 100;
+        gameLoop();
+    };
+    var stopFPS = function () {
+        if (window.gameLoopID) {
+            clearTimeout(window.gameLoopID);
+            window.gameLoopID = undefined;
+        }
+    };
 </script>
 </body>
 </html>
